@@ -11,7 +11,8 @@ public class VirtualLibrarySystem {
         library.batchUploadBooks(excelFilePath);
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter search criteria: ");
+        System.out.println("Hint : Java");
+        System.out.println("Enter search criteria: ");
         String criteria = scanner.nextLine();
         List<Book> searchResults = library.searchBooks(criteria);
 
