@@ -1,19 +1,18 @@
 package org.example;
-
+import java.util.ArrayList;
+import java.util.List;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Sample list of existing books
+        List<Book> existingBooks = new ArrayList<>();
+        existingBooks.add(new Book("Title1", "Author1", "1234567890", "Genre1", null, 0));
+        existingBooks.add(new Book("Title2", "Author2", "0987654321", "Genre2", null, 0));
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
-
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = "  + i);
-        }
+        // Check if ISBN is unique
+        String newISBN = "9876543210";
+        boolean isUnique = BookManager.isISBNUnique(newISBN, existingBooks);
+        System.out.println("Is ISBN " + newISBN + " unique? " + isUnique); // Output: true
     }
 }

@@ -1,12 +1,14 @@
 package org.Scanner;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
 public class VirtualLibrarySystem {
     public static void main(String[] args) {
         Library library = new Library();
-        library.batchUploadBooks("C:/Users/Admin/Downloads/books.csv");
+        String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
+        library.batchUploadBooks(excelFilePath);
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter search criteria: ");
