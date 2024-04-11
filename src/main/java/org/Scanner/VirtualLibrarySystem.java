@@ -1,13 +1,15 @@
 package org.Scanner;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
 public class VirtualLibrarySystem {
     public static void main(String[] args) {
         Library library = new Library();
-        String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
+       // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
+        String excelFilePath = Paths.get(System.getProperty("user.dir"), "Data", "books.csv").toString();
         library.batchUploadBooks(excelFilePath);
 
         Scanner scanner = new Scanner(System.in);

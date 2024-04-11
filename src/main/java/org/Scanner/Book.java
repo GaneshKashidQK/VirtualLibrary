@@ -63,6 +63,11 @@ public class Book {
     }
 
     public void setNumberOfCopies(int numberOfCopies) {
-        this.numberOfCopies = numberOfCopies;
+        if(numberOfCopies >= 0) {
+            this.numberOfCopies = numberOfCopies;
+        }
+        else {
+            throw new IllegalArgumentException("Number of copies cannot be negative.");
+        }
     }
 }
