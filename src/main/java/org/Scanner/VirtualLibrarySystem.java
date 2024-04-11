@@ -1,16 +1,26 @@
 package org.Scanner;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
 public class VirtualLibrarySystem {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Library library = new Library();
-       // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
-        String excelFilePath = Paths.get(System.getProperty("user.dir"), "Data", "books.csv").toString();
-        library.batchUploadBooks(excelFilePath);
+        // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
+        String fileName = "books.xml";
+        String[] parts = fileName.split("\\.");
+        String extension = parts[1];
+        String excelFilePath = Paths.get(System.getProperty("user.dir"), "Data", fileName).toString();
+        //library.batchUploadBooks(excelFilePath);
+
+
+        BatchUploaderFactory factory = new FileFormatBatchUploaderFactory();
+        BookBatchUploaders uploader = factory.createUploader(extension);
+        uploader.batchUploadBooks(excelFilePath);
+
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hint : Java");

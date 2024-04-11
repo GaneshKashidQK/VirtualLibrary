@@ -1,0 +1,26 @@
+[
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "isbn": "9780061120084",
+    "genre": "Classic",
+    "publicationDate": "1960-07-11",
+    "numOfCopies": 5
+  },
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "isbn": "9780451524935",
+    "genre": "Dystopian",
+    "publicationDate": "1949-06-08",
+    "numOfCopies": 7
+  },
+  {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "isbn": "9780743273565",
+    "genre": "Classic",
+    "publicationDate": "1925-04-10",
+    "numOfCopies": 3
+  }
+]

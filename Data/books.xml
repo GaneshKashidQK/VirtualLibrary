@@ -1,0 +1,26 @@
+<library>
+    <book>
+        <title>To Kill a Mockingbird</title>
+        <author>Harper Lee</author>
+        <isbn>9780061120084</isbn>
+        <genre>Classic</genre>
+        <publicationDate>1960-07-11</publicationDate>
+        <numOfCopies>5</numOfCopies>
+    </book>
+    <book>
+        <title>1984</title>
+        <author>George Orwell</author>
+        <isbn>9780451524935</isbn>
+        <genre>Dystopian</genre>
+        <publicationDate>1949-06-08</publicationDate>
+        <numOfCopies>7</numOfCopies>
+    </book>
+    <book>
+        <title>The Great Gatsby</title>
+        <author>F. Scott Fitzgerald</author>
+        <isbn>9780743273565</isbn>
+        <genre>Classic</genre>
+        <publicationDate>1925-04-10</publicationDate>
+        <numOfCopies>3</numOfCopies>
+    </book>
+</library>
