@@ -1,7 +1,7 @@
 package org.Scanner;
 
 public class FileFormatBatchUploaderFactory implements BatchUploaderFactory {
-    public BookBatchUploaders createUploader(String format) {
+    public BookBatchUploaders createUploader(Library library,String format) {
         if (format.equalsIgnoreCase("json")) {
             return new JsonBookBatchUploader();
         } else if (format.equalsIgnoreCase("csv")) {
@@ -12,5 +12,6 @@ public class FileFormatBatchUploaderFactory implements BatchUploaderFactory {
             throw new IllegalArgumentException("Unsupported file format: " + format);
         }
     }
+
 
 }

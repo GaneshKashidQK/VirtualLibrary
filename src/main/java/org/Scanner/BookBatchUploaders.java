@@ -3,5 +3,5 @@ package org.Scanner;
 import java.io.IOException;
 
 public interface BookBatchUploaders {
-    void batchUploadBooks(String filename) throws IOException;
+    void batchUploadBooks(Library library,String filename) throws IOException;
 }
