@@ -42,9 +42,17 @@ public class VirtualLibrarySystem {
             }
 
             System.out.print("Enter the book number for more details: ");
-            int selectedBookIndex = scanner.nextInt();
-            Book selectedBook = searchResults.get(selectedBookIndex - 1);
-            library.displayBookDetails(selectedBook);
+            try {
+                int selectedBookIndex = scanner.nextInt();
+                if (selectedBookIndex <= 0 || selectedBookIndex > searchResults.size()) {
+                    throw new IndexOutOfBoundsException();
+                }
+                Book selectedBook = searchResults.get(selectedBookIndex - 1);
+                library.displayBookDetails(selectedBook);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Invalid book number entered. Please try again.");
+            }
+
         }
 
         scanner.close();
