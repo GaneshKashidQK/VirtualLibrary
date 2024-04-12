@@ -16,19 +16,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Library {
-    static int booksAdded = 0;
-    static int skippedDuplicates = 0;
-    private static List<Book> books;
+
+    private List<Book> books;
+    private int booksAdded;
+    private int skippedDuplicates;
 
     public Library() {
-        books = new ArrayList<>();
+        this.books = new ArrayList<>();
+        this.booksAdded = 0;
+        this.skippedDuplicates = 0;
     }
 
-    public static void addBook(Book book) {
+
+
+    public   void addBook(Book book) {
         books.add(book);
     }
 
-    public static boolean isISBNUnique(String ISBN) {
+    public   boolean isISBNUnique(String ISBN) {
         for (Book book : books) {
             if (book.getISBN().equals(ISBN)) {
                 return false;
@@ -37,7 +42,7 @@ public class Library {
         return true;
     }
 
-    public static void batchUploadBooks(String filename) {
+    public static void batchUploadBooks(Library library, String filename) {
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
@@ -57,16 +62,16 @@ public class Library {
                 String publicationDate = data[4];
                 int numberOfCopies = Integer.parseInt(data[5]);
 
-                if (isISBNUnique(ISBN)) {
-                    addBook(new Book(title, author, ISBN, genre, publicationDate, numberOfCopies));
-                    booksAdded++;
+                if (library.isISBNUnique(ISBN)) {
+                    library.addBook(new Book(title, author, ISBN, genre, publicationDate, numberOfCopies));
+                    library.booksAdded++;
                 } else {
-                    skippedDuplicates++;
+                    library.skippedDuplicates++;
                 }
             }
 
-            System.out.println("Books added: " + booksAdded);
-            System.out.println("Skipped due to duplicate ISBNs: " + skippedDuplicates);
+            System.out.println("Books added: " + library.booksAdded);
+            System.out.println("Skipped due to duplicate ISBNs: " + library.skippedDuplicates);
 
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -75,7 +80,7 @@ public class Library {
     }
 
 
-    public static void batchUploadBooksJson(String filename) throws IOException {
+    public static void batchUploadBooksJson(Library library, String filename) throws IOException {
         try {
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -89,19 +94,19 @@ public class Library {
                 String publicationDate = bookNode.get("publicationDate").asText();
                 int numOfCopies = bookNode.get("numOfCopies").asInt();
 
-                if (isISBNUnique(isbn)) {
-                    addBook(new Book(title, author, isbn, genre, publicationDate, numOfCopies));
-                    booksAdded++;
+                if (library.isISBNUnique(isbn)) {
+                    library.addBook(new Book(title, author, isbn, genre, publicationDate, numOfCopies));
+                    library.booksAdded++;
                 } else {
-                    skippedDuplicates++;
+                    library.skippedDuplicates++;
                 }
                 System.out.println("Title: " + title + ", Author: " + author + ", ISBN: " + isbn +
                         ", Genre: " + genre + ", Publication Date: " + publicationDate +
                         ", Number of Copies: " + numOfCopies);
             }
 
-            System.out.println("Books added: " + booksAdded);
-            System.out.println("Skipped due to duplicate ISBNs: " + skippedDuplicates);
+            System.out.println("Books added: " + library.booksAdded);
+            System.out.println("Skipped due to duplicate ISBNs: " + library.skippedDuplicates);
 
         } catch (
                 FileNotFoundException e) {
@@ -112,7 +117,7 @@ public class Library {
     }
 
 
-    public static void batchUploadBooksXml(String filename) throws IOException {
+    public static void batchUploadBooksXml(Library library, String filename) throws IOException {
         try {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -128,15 +133,15 @@ public class Library {
                 String genre = getChildElementTextContent(bookElement, "genre");
                 String publicationDate = getChildElementTextContent(bookElement, "publicationDate");
                 int numOfCopies = Integer.parseInt(getChildElementTextContent(bookElement, "numOfCopies"));
-                if (isISBNUnique(isbn)) {
-                    addBook(new Book(title, author, isbn, genre, publicationDate, numOfCopies));
-                    booksAdded++;
+                if (library.isISBNUnique(isbn)) {
+                    library.addBook(new Book(title, author, isbn, genre, publicationDate, numOfCopies));
+                    library.booksAdded++;
                 } else {
-                    skippedDuplicates++;
+                    library.skippedDuplicates++;
                 }
 
-                System.out.println("Books added: " + booksAdded);
-                System.out.println("Skipped due to duplicate ISBNs: " + skippedDuplicates);
+                System.out.println("Books added: " + library.booksAdded);
+                System.out.println("Skipped due to duplicate ISBNs: " + library.skippedDuplicates);
 
             }
         } catch (Exception e) {

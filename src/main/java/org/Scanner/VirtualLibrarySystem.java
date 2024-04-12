@@ -7,10 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VirtualLibrarySystem {
+    private Library library;
+    public VirtualLibrarySystem() {
+        this.library = new Library();
+    }
+
     public static void main(String[] args) throws IOException {
         Library library = new Library();
         // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
-        String fileName = "books.xml";
+        String fileName = "books.csv";
         String[] parts = fileName.split("\\.");
         String extension = parts[1];
         String excelFilePath = Paths.get(System.getProperty("user.dir"), "Data", fileName).toString();
@@ -18,12 +23,11 @@ public class VirtualLibrarySystem {
 
 
         BatchUploaderFactory factory = new FileFormatBatchUploaderFactory();
-        BookBatchUploaders uploader = factory.createUploader(extension);
-        uploader.batchUploadBooks(excelFilePath);
+        BookBatchUploaders uploader = factory.createUploader(library,extension);
+        uploader.batchUploadBooks(library,excelFilePath);
 
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Hint : Java");
         System.out.println("Enter search criteria: ");
         String criteria = scanner.nextLine();
         List<Book> searchResults = library.searchBooks(criteria);
