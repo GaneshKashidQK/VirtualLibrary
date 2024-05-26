@@ -13,7 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Library {
 
@@ -179,5 +181,40 @@ public class Library {
         System.out.println("Genre: " + book.getGenre());
         System.out.println("Publication Date: " + book.getPublicationDate());
     }
+
+
+    public List<Book> searchBooks(Map<String, String> searchCriteria) {
+        return books.stream()
+                .filter(book -> matchesCriteria(book, searchCriteria))
+                .collect(Collectors.toList());
+    }
+
+    private boolean matchesCriteria(Book book, Map<String, String> searchCriteria) {
+        for (Map.Entry<String, String> entry : searchCriteria.entrySet()) {
+            switch (entry.getKey()) {
+                case "title":
+                    if (!book.getTitle().contains(entry.getValue())) return false;
+                    break;
+                case "author":
+                    if (!book.getAuthor().contains(entry.getValue())) return false;
+                    break;
+                case "ISBN":
+                    if (!book.getISBN().contains(entry.getValue())) return false;
+                    break;
+                case "genre":
+                    if (!book.getGenre().equals(entry.getValue())) return false;
+                    break;
+                case "publicationDate":
+                    if (!book.getPublicationDate().toString().contains(entry.getValue())) return false;
+                    break;
+                default:
+                    return false;
+            }
+        }
+        return true;
+    }
+
+
+
 
 }

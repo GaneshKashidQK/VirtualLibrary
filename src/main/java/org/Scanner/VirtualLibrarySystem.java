@@ -3,11 +3,13 @@ package org.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class VirtualLibrarySystem {
-    private Library library;
+    private static Library library;
     public VirtualLibrarySystem() {
         this.library = new Library();
     }
@@ -57,4 +59,36 @@ public class VirtualLibrarySystem {
 
         scanner.close();
     }
+
+
+    public static void runSearchLoop() {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, String> searchCriteria = new HashMap<>();
+
+        while (true) {
+            System.out.println("Enter search criteria (leave empty to finish):");
+            System.out.println("Filter by (title/author/ISBN/genre/publicationDate): ");
+            String filterType = scanner.nextLine();
+            if (filterType.isEmpty()) {
+                break;
+            }
+            System.out.println("Filter value: ");
+            String filterValue = scanner.nextLine();
+
+            searchCriteria.put(filterType, filterValue);
+            List<Book> filteredResults = library.searchBooks(searchCriteria);
+            displaySearchResults(filteredResults);
+        }
+
+        scanner.close();
+    }
+
+    private static  void displaySearchResults(List<Book> books) {
+        if (books.isEmpty()) {
+            System.out.println("No books match your criteria.");
+            return;
+        }
+        books.forEach(book -> library.displayBookDetails(book));
+    }
+
 }
