@@ -164,6 +164,7 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                         break;
                     } else {
+                        ResourceBundle messages = ResourceBundle.getBundle("messages", Locale.getDefault());
                         String outOfStockAlert = MessageFormat.format(messages.getString("alertOutOfStock"), book.getTitle());
                         System.out.println(outOfStockAlert);
                         offerRetryOptions(scanner);
