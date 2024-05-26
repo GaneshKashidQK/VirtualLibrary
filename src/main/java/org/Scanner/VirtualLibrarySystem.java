@@ -12,6 +12,7 @@ public class VirtualLibrarySystem {
     }
 
     public static void main(String[] args) throws IOException {
+        loadBooksToLibrary(library);
         runLibrarySystem(library);
     }
     private static void runLibrarySystem(Library library) {
@@ -138,6 +139,7 @@ public class VirtualLibrarySystem {
         // Simple validation for ISBN-10 or ISBN-13 formats
         return ISBN.matches("\\d{10}") || ISBN.matches("\\d{13}");
     }
+
     private static void borrowBookByISBN(Library library, Scanner scanner) {
         while (true) {
             System.out.println("Enter your user ID:");
@@ -161,7 +163,7 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                         break;
                     } else {
-                        System.out.println("Sorry, this book is currently out of stock.");
+                        System.out.println("ALERT: The book titled '" + book.getTitle() + "' is currently Out of Stock. Unable to proceed with borrowing.");
                         offerRetryOptions(scanner);
                     }
                 } else {
