@@ -14,8 +14,25 @@ public class VirtualLibrarySystem {
     public static void main(String[] args) throws IOException {
         loadBooksToLibrary(library);
         runSearchLoop(library);
+        runLibrarySystem(library);
     }
-
+    private static void runLibrarySystem(Library library) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter 'search' to search books, 'borrow' to borrow a book, or 'exit' to quit:");
+            String command = scanner.nextLine();
+            if ("exit".equalsIgnoreCase(command)) {
+                break;
+            } else if ("search".equalsIgnoreCase(command)) {
+                runSearchLoop(library);
+            } else if ("borrow".equalsIgnoreCase(command)) {
+                borrowBookByISBN(library, scanner);
+            }else if ("viewlog".equalsIgnoreCase(command)) {
+                viewTransactionLog(library);
+            }
+        }
+        scanner.close();
+    }
     private static void loadBooksToLibrary(Library library) throws IOException {
       library = new Library();
         // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
@@ -126,6 +143,8 @@ public class VirtualLibrarySystem {
         return ISBN.matches("\\d{10}") || ISBN.matches("\\d{13}");
     }
     private static void borrowBookByISBN(Library library, Scanner scanner){
+        System.out.println("Enter your user ID:");
+        String userId = scanner.nextLine();
         System.out.println("Enter the ISBN of the book you wish to borrow:");
         String ISBN = scanner.nextLine();
         if (!validateISBN(ISBN)){
@@ -140,7 +159,7 @@ public class VirtualLibrarySystem {
             System.out.println("Do you want to proceed with borrowing this book? (yes/no):");
             String confirmation = scanner.nextLine();
             if ("yes".equalsIgnoreCase(confirmation)) {
-                if (library.borrowBook(ISBN)) {
+                if (library.borrowBook(userId, ISBN)) {
                     System.out.println("Book borrowed successfully!");
                 } else {
                     System.out.println("Sorry, this book is currently out of stock.");
@@ -153,5 +172,16 @@ public class VirtualLibrarySystem {
         }
     }
 
+    private static void viewTransactionLog(Library library) {
+        List<Transaction> transactionLog = library.getTransactionLog();
+        if (transactionLog.isEmpty()) {
+            System.out.println("No transactions found.");
+        } else {
+            for (Transaction transaction : transactionLog) {
+                System.out.println(transaction);
+            }
+        }
+
+    }
 }
 

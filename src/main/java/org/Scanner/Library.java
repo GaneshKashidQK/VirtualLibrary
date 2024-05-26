@@ -11,17 +11,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Library {
 
     private List<Book> books = new ArrayList<>();
+    private List<Transaction> transactionLog;
     public int booksAdded = 0;
     public int skippedDuplicates = 0;
 
     public Library() {
         this.books = new ArrayList<>();
+        transactionLog = new ArrayList<>();
     }
 
 
@@ -38,17 +41,22 @@ public class Library {
       return books.stream().filter(book -> book.getISBN().equals(ISBN)).findFirst();
     }
 
-    public boolean borrowBook(String ISBN){
+    public boolean borrowBook(String userId, String ISBN){
 
         Optional<Book> optionalBook=findBookByISBN(ISBN);
         if (optionalBook.isPresent()){
         Book book=optionalBook.get();
         if (book.getNumberOfCopies()>0){
             book.setNumberOfCopies(book.getNumberOfCopies()-1);
+            transactionLog.add(new Transaction(userId, ISBN, LocalDate.now()));
             return  true;
          }
         }
         return false;
+    }
+
+    public List<Transaction> getTransactionLog() {
+        return transactionLog;
     }
 
     public static void batchUploadBooks(Library library, String filename) throws IOException {
