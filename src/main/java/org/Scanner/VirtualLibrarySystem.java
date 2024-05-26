@@ -11,7 +11,7 @@ public class VirtualLibrarySystem {
     public VirtualLibrarySystem() {
         this.library = new Library();
     }
-    private static ResourceBundle messages = ResourceBundle.getBundle("messages");
+    private static ResourceBundle messages = ResourceBundle.getBundle("messages", Locale.getDefault());
     public static void main(String[] args) throws IOException {
         loadBooksToLibrary(library);
         runLibrarySystem(library);
@@ -164,8 +164,8 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                         break;
                     } else {
-                        ResourceBundle messages = ResourceBundle.getBundle("messages", Locale.getDefault());
-                        System.out.println(MessageFormat.format(messages.getString("alertOutOfStock"), book.getTitle()));
+                        String outOfStockAlert = MessageFormat.format(messages.getString("alertOutOfStock"), book.getTitle());
+                        System.out.println(outOfStockAlert);
                         offerRetryOptions(scanner);
                     }
                 } else {
