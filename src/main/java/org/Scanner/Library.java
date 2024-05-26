@@ -11,10 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Library {
@@ -35,6 +32,23 @@ public class Library {
 
     public   boolean isISBNUnique(String ISBN) {
         return books.stream().noneMatch(book -> book.getISBN().equals(ISBN));
+    }
+
+    public Optional<Book> findBookByISBN(String ISBN){
+      return books.stream().filter(book -> book.getISBN().equals(ISBN)).findFirst();
+    }
+
+    public boolean borrowBook(String ISBN){
+
+        Optional<Book> optionalBook=findBookByISBN(ISBN);
+        if (optionalBook.isPresent()){
+        Book book=optionalBook.get();
+        if (book.getNumberOfCopies()>0){
+            book.setNumberOfCopies(book.getNumberOfCopies()-1);
+            return  true;
+         }
+        }
+        return false;
     }
 
     public static void batchUploadBooks(Library library, String filename) throws IOException {

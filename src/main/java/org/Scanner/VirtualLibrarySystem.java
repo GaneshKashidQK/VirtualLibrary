@@ -3,10 +3,7 @@ package org.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class VirtualLibrarySystem {
     private static Library library;
@@ -123,6 +120,37 @@ public class VirtualLibrarySystem {
         System.out.println("Genre: " + book.getGenre());
         System.out.println("Publication Date: " + book.getPublicationDate());
         System.out.println("Available Copies: " + (book.getNumberOfCopies() > 0 ? book.getNumberOfCopies() : "Out of Stock"));
+    }
+    private static boolean validateISBN(String ISBN) {
+        // Simple validation for ISBN-10 or ISBN-13 formats
+        return ISBN.matches("\\d{10}") || ISBN.matches("\\d{13}");
+    }
+    private static void borrowBookByISBN(Library library, Scanner scanner){
+        System.out.println("Enter the ISBN of the book you wish to borrow:");
+        String ISBN = scanner.nextLine();
+        if (!validateISBN(ISBN)){
+            System.out.println("Invalid ISBN format. Please try again.");
+            return;
+        }
+
+        Optional<Book> bookOptional = library.findBookByISBN(ISBN);
+        if (bookOptional.isPresent()) {
+            Book book = bookOptional.get();
+            System.out.println("You have selected: " + book.getTitle() + " by " + book.getAuthor());
+            System.out.println("Do you want to proceed with borrowing this book? (yes/no):");
+            String confirmation = scanner.nextLine();
+            if ("yes".equalsIgnoreCase(confirmation)) {
+                if (library.borrowBook(ISBN)) {
+                    System.out.println("Book borrowed successfully!");
+                } else {
+                    System.out.println("Sorry, this book is currently out of stock.");
+                }
+            } else {
+                System.out.println("Borrowing process cancelled.");
+            }
+        } else {
+            System.out.println("Book with ISBN " + ISBN + " not found.");
+        }
     }
 
 }
