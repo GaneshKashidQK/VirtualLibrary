@@ -49,6 +49,9 @@ public class Library {
         if (book.getNumberOfCopies()>0){
             book.setNumberOfCopies(book.getNumberOfCopies()-1);
             transactionLog.add(new Transaction(userId, ISBN, LocalDate.now()));
+            if (book.getNumberOfCopies() == 0) {
+                book.setStatus("Out of Stock");
+            }
             return  true;
          }
         }

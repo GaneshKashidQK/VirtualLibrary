@@ -8,7 +8,7 @@ public class Book {
     private String genre;
     private String publicationDate;
     private int numberOfCopies;
-
+    private String status;
     public Book(String title, String author, String ISBN, String genre, String publicationDate, int numberOfCopies) {
         this.title = title;
         this.author = author;
@@ -16,6 +16,7 @@ public class Book {
         this.genre = genre;
         this.publicationDate = publicationDate;
         this.numberOfCopies = numberOfCopies;
+        this.status = numberOfCopies > 0 ? "Available" : "Out of Stock";
     }
 
     public String getTitle() {
@@ -69,4 +70,13 @@ public class Book {
             throw new IllegalArgumentException("Number of copies cannot be negative.");
         }
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }
