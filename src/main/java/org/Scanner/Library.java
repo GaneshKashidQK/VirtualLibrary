@@ -44,7 +44,7 @@ public class Library {
         return true;
     }
 
-    public  void batchUploadBooks(Library library, String filename) {
+    public static void batchUploadBooks(Library library, String filename) {
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
@@ -119,7 +119,7 @@ public class Library {
     }
 
 
-    public  void batchUploadBooksXml(Library library, String filename) throws IOException {
+    public static void batchUploadBooksXml(Library library, String filename) throws IOException {
         try {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -151,7 +151,7 @@ public class Library {
         }
     }
 
-    private  String getChildElementTextContent(Element parentElement, String tagName) {
+    private static String getChildElementTextContent(Element parentElement, String tagName) {
         NodeList nodeList = parentElement.getElementsByTagName(tagName);
         if (nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();

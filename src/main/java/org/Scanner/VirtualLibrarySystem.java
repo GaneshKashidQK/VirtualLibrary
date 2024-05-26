@@ -93,17 +93,37 @@ public class VirtualLibrarySystem {
     private static  void displaySearchResults(List<Book> books) {
         if (books.isEmpty()) {
             System.out.println("No books match your criteria.");
-        } else {
-            for (Book book : books) {
-                System.out.println("Title: " + book.getTitle());
-                System.out.println("Author: " + book.getAuthor());
-                System.out.println("ISBN: " + book.getISBN());
-                System.out.println("Genre: " + book.getGenre());
-                System.out.println("Publication Date: " + book.getPublicationDate());
-                System.out.println("Number of Copies: " + book.getNumberOfCopies());
-                System.out.println("-------------------------");
+            return;
+        }  Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            System.out.println((i + 1) + ": " + book.getTitle() + " by " + book.getAuthor() + " (ISBN: " + book.getISBN() + ")");
+        }
+        System.out.println("Enter the book number for more details, or leave empty to exit: ");
+        String selection = scanner.nextLine();
+        if (!selection.isEmpty()) {
+            try {
+                int bookNumber = Integer.parseInt(selection);
+                if (bookNumber > 0 && bookNumber <= books.size()) {
+                    Book selectedBook = books.get(bookNumber - 1); // Adjust for zero-based index
+                    displayBookDetails(selectedBook);
+                } else {
+                    System.out.println("Invalid selection.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
             }
         }
+        }
+
+    private static void displayBookDetails(Book book) {
+        System.out.println("Title: " + book.getTitle());
+        System.out.println("Author: " + book.getAuthor());
+        System.out.println("ISBN: " + book.getISBN());
+        System.out.println("Genre: " + book.getGenre());
+        System.out.println("Publication Date: " + book.getPublicationDate());
+        System.out.println("Available Copies: " + (book.getNumberOfCopies() > 0 ? book.getNumberOfCopies() : "Out of Stock"));
     }
 
 }
+
