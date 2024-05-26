@@ -15,7 +15,12 @@ public class VirtualLibrarySystem {
     }
 
     public static void main(String[] args) throws IOException {
-        Library library = new Library();
+        loadBooksToLibrary(library);
+        runSearchLoop(library);
+    }
+
+    private static void loadBooksToLibrary(Library library) throws IOException {
+      library = new Library();
         // String excelFilePath = System.getProperty("user.dir") + File.separator + "/Data/books.csv";
         String fileName = "books.csv";
         String[] parts = fileName.split("\\.");
@@ -27,61 +32,63 @@ public class VirtualLibrarySystem {
         BatchUploaderFactory factory = new FileFormatBatchUploaderFactory();
         BookBatchUploaders uploader = factory.createUploader(library,extension);
         uploader.batchUploadBooks(library,excelFilePath);
+    }
 
-
+    private static void runSearchLoop(Library library) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter search criteria: ");
-        String criteria = scanner.nextLine();
-        List<Book> searchResults = library.searchBooks(criteria);
 
-        if (searchResults.isEmpty()) {
-            System.out.println("No books found matching the criteria.");
-        } else {
-            for (int i = 0; i < searchResults.size(); i++) {
-                Book book = searchResults.get(i);
-                System.out.println((i + 1) + ". " + book.getTitle() + " by " + book.getAuthor() + " (" + book.getISBN() + ")");
-                System.out.println("-----------------------------------");
+        while (true) {
+            System.out.println("Enter search criteria (title, author, ISBN, or 'advanced' for more filters, leave empty to exit): ");
+            String criteria = scanner.nextLine();
+            if (criteria.isEmpty()) {
+                break;
             }
+            if ("advanced".equalsIgnoreCase(criteria)) {
+                Map<String, String> searchCriteria = getAdvancedSearchCriteria(scanner);
+                List<Book> filteredResults = library.searchBooks(searchCriteria);
+                displaySearchResults(filteredResults);
+            } else {
+                List<Book> searchResults = library.searchBooks(criteria);
+                displaySearchResults(searchResults);
 
-            System.out.print("Enter the book number for more details: ");
-            try {
-                int selectedBookIndex = scanner.nextInt();
-                if (selectedBookIndex <= 0 || selectedBookIndex > searchResults.size()) {
-                    throw new IndexOutOfBoundsException();
+                // Ask if the user wants to apply additional filters
+                System.out.println("Would you like to apply additional filters? (yes/no): ");
+                String additionalFilters = scanner.nextLine();
+                if (additionalFilters.equalsIgnoreCase("yes")) {
+                    Map<String, String> searchCriteria = getAdvancedSearchCriteria(scanner);
+                    searchCriteria.put("basic", criteria); // Include the initial basic search criteria
+                    List<Book> filteredResults = library.searchBooks(searchCriteria);
+                    displaySearchResults(filteredResults);
                 }
-                Book selectedBook = searchResults.get(selectedBookIndex - 1);
-                library.displayBookDetails(selectedBook);
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Invalid book number entered. Please try again.");
             }
 
+            System.out.println("Would you like to continue searching? (yes/no): ");
+            String continueSearch = scanner.nextLine();
+            if (!continueSearch.equalsIgnoreCase("yes")) {
+                break;
+            }
         }
 
         scanner.close();
     }
 
-
-    public static void runSearchLoop() {
-        Scanner scanner = new Scanner(System.in);
+    private static Map<String, String> getAdvancedSearchCriteria(Scanner scanner) {
         Map<String, String> searchCriteria = new HashMap<>();
 
         while (true) {
-            System.out.println("Enter search criteria (leave empty to finish):");
-            System.out.println("Filter by (title/author/ISBN/genre/publicationDate): ");
+            System.out.println("Enter filter type (title, author, ISBN, genre, publicationDate) or 'done' to finish: ");
             String filterType = scanner.nextLine();
-            if (filterType.isEmpty()) {
+            if (filterType.equalsIgnoreCase("done")) {
                 break;
             }
-            System.out.println("Filter value: ");
+            System.out.println("Enter filter value: ");
             String filterValue = scanner.nextLine();
-
             searchCriteria.put(filterType, filterValue);
-            List<Book> filteredResults = library.searchBooks(searchCriteria);
-            displaySearchResults(filteredResults);
         }
 
-        scanner.close();
+        return searchCriteria;
     }
+
 
     private static  void displaySearchResults(List<Book> books) {
         if (books.isEmpty()) {
