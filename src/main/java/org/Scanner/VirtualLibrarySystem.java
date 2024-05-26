@@ -93,9 +93,17 @@ public class VirtualLibrarySystem {
     private static  void displaySearchResults(List<Book> books) {
         if (books.isEmpty()) {
             System.out.println("No books match your criteria.");
-            return;
+        } else {
+            for (Book book : books) {
+                System.out.println("Title: " + book.getTitle());
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("ISBN: " + book.getISBN());
+                System.out.println("Genre: " + book.getGenre());
+                System.out.println("Publication Date: " + book.getPublicationDate());
+                System.out.println("Number of Copies: " + book.getNumberOfCopies());
+                System.out.println("-------------------------");
+            }
         }
-        books.forEach(book -> library.displayBookDetails(book));
     }
 
 }

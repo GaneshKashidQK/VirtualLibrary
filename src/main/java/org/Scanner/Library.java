@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class Library {
 
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
     private int booksAdded;
     private int skippedDuplicates;
 
@@ -161,26 +161,13 @@ public class Library {
     }
 
     public List<Book> searchBooks(String criteria) {
-        List<Book> results = new ArrayList<>();
-        for (Book book : books) {
-            if (book.getTitle().toLowerCase().contains(criteria.toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(criteria.toLowerCase()) ||
-                    book.getISBN().toLowerCase().contains(criteria.toLowerCase())) {
-                results.add(book);
-            }
-        }
-        return results;
+        return books.stream()
+                .filter(book -> book.getTitle().contains(criteria) ||
+                        book.getAuthor().contains(criteria) ||
+                        book.getISBN().contains(criteria))
+                .collect(Collectors.toList());
     }
 
-    // Display book details in CLI
-    public void displayBookDetails(Book book) {
-        System.out.println("------------------------------------");
-        System.out.println("Title: " + book.getTitle());
-        System.out.println("Author: " + book.getAuthor());
-        System.out.println("ISBN: " + book.getISBN());
-        System.out.println("Genre: " + book.getGenre());
-        System.out.println("Publication Date: " + book.getPublicationDate());
-    }
 
 
     public List<Book> searchBooks(Map<String, String> searchCriteria) {
@@ -206,6 +193,11 @@ public class Library {
                     break;
                 case "publicationDate":
                     if (!book.getPublicationDate().toString().contains(entry.getValue())) return false;
+                    break;
+                case "basic":
+                    if (!(book.getTitle().contains(entry.getValue()) ||
+                            book.getAuthor().contains(entry.getValue()) ||
+                            book.getISBN().contains(entry.getValue()))) return false;
                     break;
                 default:
                     return false;
