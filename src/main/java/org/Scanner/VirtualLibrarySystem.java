@@ -164,7 +164,6 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                         break;
                     } else {
-                       // System.out.println("**** ALERT: The requested book, '" + book.getTitle() + "', is OUT OF STOCK. ****");
                         System.out.println(MessageFormat.format(messages.getString("alertOutOfStock"), book.getTitle()));
                         offerRetryOptions(scanner);
                     }
