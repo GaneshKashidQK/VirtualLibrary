@@ -10,7 +10,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
-    private Library library;
+    private static Library library;
 
     String date = String.valueOf(new Date());
 
@@ -41,19 +41,19 @@ public class LibraryTest {
 
     @Test
     public void testBatchUploadBooks() throws IOException {
-        library.batchUploadBooks(library,"books.csv");
+        Library.batchUploadBooks(library,"books.csv");
         assertFalse(library.searchBooks("Test Title").isEmpty());
     }
 
     @Test
     public void testBatchUploadBooksJson() throws IOException {
-        library.batchUploadBooksJson(library,"books.json");
+        Library.batchUploadBooksJson(library,"books.json");
         assertFalse(library.searchBooks("Test Title").isEmpty());
     }
 
     @Test
     public void testBatchUploadBooksXml() throws IOException {
-        library.batchUploadBooksXml(library,"books.xml");
+        Library.batchUploadBooksXml(library,"books.xml");
         assertFalse(library.searchBooks("Test Title").isEmpty());
     }
 }
