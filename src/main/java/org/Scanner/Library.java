@@ -20,13 +20,11 @@ import java.util.stream.Collectors;
 public class Library {
 
     private List<Book> books = new ArrayList<>();
-    private int booksAdded;
-    private int skippedDuplicates;
+    public int booksAdded = 0;
+    public int skippedDuplicates = 0;
 
     public Library() {
         this.books = new ArrayList<>();
-        this.booksAdded = 0;
-        this.skippedDuplicates = 0;
     }
 
 
@@ -36,15 +34,10 @@ public class Library {
     }
 
     public   boolean isISBNUnique(String ISBN) {
-        for (Book book : books) {
-            if (book.getISBN().equals(ISBN)) {
-                return false;
-            }
-        }
-        return true;
+        return books.stream().noneMatch(book -> book.getISBN().equals(ISBN));
     }
 
-    public static void batchUploadBooks(Library library, String filename) {
+    public static void batchUploadBooks(Library library, String filename) throws IOException {
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
@@ -77,7 +70,9 @@ public class Library {
 
             scanner.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new IOException("File not found: " + filename, e);
+        } catch (Exception e) {
+            throw new IOException("Error reading file: " + filename, e);
         }
     }
 
