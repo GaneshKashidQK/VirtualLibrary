@@ -12,8 +12,6 @@ public class VirtualLibrarySystem {
     }
 
     public static void main(String[] args) throws IOException {
-        loadBooksToLibrary(library);
-        runSearchLoop(library);
         runLibrarySystem(library);
     }
     private static void runLibrarySystem(Library library) {
@@ -24,7 +22,7 @@ public class VirtualLibrarySystem {
             if ("exit".equalsIgnoreCase(command)) {
                 break;
             } else if ("search".equalsIgnoreCase(command)) {
-                runSearchLoop(library);
+                runSearchLoop(library, scanner);
             } else if ("borrow".equalsIgnoreCase(command)) {
                 borrowBookByISBN(library, scanner);
             }else if ("viewlog".equalsIgnoreCase(command)) {
@@ -48,9 +46,7 @@ public class VirtualLibrarySystem {
         uploader.batchUploadBooks(library,excelFilePath);
     }
 
-    private static void runSearchLoop(Library library) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static void runSearchLoop(Library library, Scanner scanner) {
         while (true) {
             System.out.println("Enter search criteria (title, author, ISBN, or 'advanced' for more filters, leave empty to exit): ");
             String criteria = scanner.nextLine();
@@ -142,33 +138,55 @@ public class VirtualLibrarySystem {
         // Simple validation for ISBN-10 or ISBN-13 formats
         return ISBN.matches("\\d{10}") || ISBN.matches("\\d{13}");
     }
-    private static void borrowBookByISBN(Library library, Scanner scanner){
-        System.out.println("Enter your user ID:");
-        String userId = scanner.nextLine();
-        System.out.println("Enter the ISBN of the book you wish to borrow:");
-        String ISBN = scanner.nextLine();
-        if (!validateISBN(ISBN)){
-            System.out.println("Invalid ISBN format. Please try again.");
-            return;
-        }
+    private static void borrowBookByISBN(Library library, Scanner scanner) {
+        while (true) {
+            System.out.println("Enter your user ID:");
+            String userId = scanner.nextLine();
 
-        Optional<Book> bookOptional = library.findBookByISBN(ISBN);
-        if (bookOptional.isPresent()) {
-            Book book = bookOptional.get();
-            System.out.println("You have selected: " + book.getTitle() + " by " + book.getAuthor());
-            System.out.println("Do you want to proceed with borrowing this book? (yes/no):");
-            String confirmation = scanner.nextLine();
-            if ("yes".equalsIgnoreCase(confirmation)) {
-                if (library.borrowBook(userId, ISBN)) {
-                    System.out.println("Book borrowed successfully!");
+            System.out.println("Enter the ISBN of the book you wish to borrow:");
+            String ISBN = scanner.nextLine();
+            if (!validateISBN(ISBN)) {
+                System.out.println("Invalid ISBN format. Please try again.");
+                continue;
+            }
+
+            Optional<Book> bookOptional = library.findBookByISBN(ISBN);
+            if (bookOptional.isPresent()) {
+                Book book = bookOptional.get();
+                System.out.println("You have selected: " + book.getTitle() + " by " + book.getAuthor());
+                System.out.println("Do you want to proceed with borrowing this book? (yes/no):");
+                String confirmation = scanner.nextLine();
+                if ("yes".equalsIgnoreCase(confirmation)) {
+                    if (library.borrowBook(userId, ISBN)) {
+                        System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
+                        break;
+                    } else {
+                        System.out.println("Sorry, this book is currently out of stock.");
+                        offerRetryOptions(scanner);
+                    }
                 } else {
-                    System.out.println("Sorry, this book is currently out of stock.");
+                    System.out.println("Borrowing process cancelled.");
+                    offerRetryOptions(scanner);
                 }
             } else {
-                System.out.println("Borrowing process cancelled.");
+                System.out.println("Book with ISBN " + ISBN + " not found.");
+                offerRetryOptions(scanner);
             }
-        } else {
-            System.out.println("Book with ISBN " + ISBN + " not found.");
+        }
+    }
+
+    private static void offerRetryOptions(Scanner scanner) {
+        while (true) {
+            System.out.println("Enter 'menu' to return to the main menu or 'search' to search for another book:");
+            String option = scanner.nextLine();
+            if ("menu".equalsIgnoreCase(option)) {
+                return;
+            } else if ("search".equalsIgnoreCase(option)) {
+                runSearchLoop(library, scanner);
+                return;
+            } else {
+                System.out.println("Invalid option. Please try again.");
+            }
         }
     }
 
