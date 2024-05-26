@@ -136,8 +136,8 @@ public class VirtualLibrarySystem {
         System.out.println("Available Copies: " + (book.getNumberOfCopies() > 0 ? book.getNumberOfCopies() : "Out of Stock"));
     }
     private static boolean validateISBN(String ISBN) {
-        // Simple validation for ISBN-10 or ISBN-13 formats
-        return ISBN.matches("\\d{10}") || ISBN.matches("\\d{13}");
+        // Example validation logic, can be enhanced based on actual ISBN format rules
+        return ISBN != null && ISBN.matches("\\d{13}");
     }
 
     private static void borrowBookByISBN(Library library, Scanner scanner) {
@@ -163,7 +163,7 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                         break;
                     } else {
-                        System.out.println("ALERT: The book titled '" + book.getTitle() + "' is currently Out of Stock. Unable to proceed with borrowing.");
+                        System.out.println("ALERT: The book titled '" + book.getTitle().toUpperCase() + "' is CURRENTLY OUT OF STOCK and cannot be borrowed.");
                         offerRetryOptions(scanner);
                     }
                 } else {
