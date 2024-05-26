@@ -163,7 +163,7 @@ public class VirtualLibrarySystem {
                         System.out.println("Book borrowed successfully! Remaining copies: " + book.getNumberOfCopies());
                     } else {
                          // Provide a visually distinct and clear alert message.
-                        System.out.println("**** ALERT: Book '\" + book.getTitle() + \"' is OUT OF STOCK and cannot be borrowed at this moment. ****");
+                        System.out.println("ALERT: The requested book, " + book.getTitle() + ", is out of stock.");
                     }
                 } else {
                     System.out.println("Borrowing process cancelled.");
